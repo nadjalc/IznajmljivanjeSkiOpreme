@@ -8,6 +8,10 @@ package forma.parSkija;
 import domen.ParSkija;
 import domen.TipSkija;
 import java.awt.Frame;
+import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import poslovnaLogika.Kontroler;
@@ -18,12 +22,12 @@ import poslovnaLogika.Kontroler;
  */
 public class FrmUnosParaSkija extends javax.swing.JDialog {
 
-    
     public FrmUnosParaSkija(Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
         srediFormu();
     }
+
     public FrmUnosParaSkija(JDialog parent, boolean modal, ParSkija ps) {
         super(parent, modal);
         initComponents();
@@ -31,7 +35,6 @@ public class FrmUnosParaSkija extends javax.swing.JDialog {
         popuniPolja(ps);
     }
 
-  
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -137,11 +140,11 @@ public class FrmUnosParaSkija extends javax.swing.JDialog {
             double radijus = Double.parseDouble(jTextFieldRadijus.getText().trim());
             String vezovi = jTextFieldVezovi.getText().trim();
             TipSkija tipSkija = (TipSkija) jComboBox1.getSelectedItem();
-            
+
             ParSkija ps = new ParSkija(parSkijaID, duzina, radijus, vezovi, tipSkija);
             Kontroler.getInstance().sacuvajParSkija(ps);
             JOptionPane.showMessageDialog(this, "Par skija je sacuvan");
-            
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Par skija nije sacuvan " + e.getMessage());
         }
@@ -151,8 +154,6 @@ public class FrmUnosParaSkija extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
-    
-   
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonUnos;
@@ -170,8 +171,17 @@ public class FrmUnosParaSkija extends javax.swing.JDialog {
 
     private void srediFormu() {
         jComboBox1.removeAllItems();
-        jComboBox1.addItem(new TipSkija("01", "Karving"));
-        jComboBox1.addItem(new TipSkija("02", "Slalom"));
+        try {
+            //        jComboBox1.addItem(new TipSkija("01", "Karving"));
+//        jComboBox1.addItem(new TipSkija("02", "Slalom"));
+            LinkedList<TipSkija> lts = Kontroler.getInstance().vratiListuTipovaSkija();
+            for (TipSkija lt : lts) {
+                jComboBox1.addItem(lt);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(FrmUnosParaSkija.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
     }
 
     private void popuniPolja(ParSkija ps) {
@@ -180,7 +190,6 @@ public class FrmUnosParaSkija extends javax.swing.JDialog {
         jTextFieldRadijus.setText(Double.toString(ps.getRadijus()));
         jTextFieldVezovi.setText(ps.getVezovi());
         jComboBox1.setSelectedItem(ps.getTipSkija());
-        
-        
+
     }
 }
