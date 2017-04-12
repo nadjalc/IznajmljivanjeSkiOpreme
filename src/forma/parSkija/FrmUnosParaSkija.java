@@ -56,6 +56,7 @@ public class FrmUnosParaSkija extends javax.swing.JDialog {
         jLabel1.setText("Par skija ID");
 
         jTextFieldID.setEditable(false);
+        jTextFieldID.setBackground(new java.awt.Color(255, 255, 255));
         jTextFieldID.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTextFieldIDActionPerformed(evt);
@@ -142,7 +143,7 @@ public class FrmUnosParaSkija extends javax.swing.JDialog {
 
     private void jButtonUnosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUnosActionPerformed
         try {
-            String parSkijaID = jTextFieldID.getText().trim();
+            int parSkijaID = Integer.parseInt(jTextFieldID.getText().trim());
             int duzina = Integer.parseInt(jTextFieldDuzina.getText().trim());
             double radijus = Double.parseDouble(jTextFieldRadijus.getText().trim());
             String vezovi = jTextFieldVezovi.getText().trim();
@@ -196,7 +197,7 @@ public class FrmUnosParaSkija extends javax.swing.JDialog {
     }
 
     private void popuniPolja(ParSkija ps) {
-        jTextFieldID.setText(ps.getParSkijaID());
+        jTextFieldID.setText(Integer.toString(ps.getParSkijaID()));
         jTextFieldDuzina.setText(Integer.toString(ps.getDuzina()));
         jTextFieldRadijus.setText(Double.toString(ps.getRadijus()));
         jTextFieldVezovi.setText(ps.getVezovi());

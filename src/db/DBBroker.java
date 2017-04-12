@@ -17,6 +17,7 @@ import java.sql.Statement;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import util.DBUtil;
 
 /**
@@ -28,7 +29,7 @@ public class DBBroker {
     private static DBBroker instanca;
     private Connection connection;
 
-    public DBBroker(){
+    public DBBroker() {
         try {
             DBUtil dbUtil = new DBUtil();
             String url = dbUtil.vratiURL();
@@ -41,35 +42,44 @@ public class DBBroker {
             Logger.getLogger(DBBroker.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-       public static DBBroker vratiBrokera(){
-        if(instanca == null){
+
+    public static DBBroker vratiBrokera() {
+        if (instanca == null) {
 
             instanca = new DBBroker();
         }
         return instanca;
     }
-       
-       public void kreirajParSkija(ParSkija ps) throws SQLException{
-           String sql = "INSERT INTO parskija VALUES (?,?,?,?,?)";
-           PreparedStatement p  =  connection.prepareStatement(sql);
-           p.setString(1, ps.getParSkijaID());
-           p.setInt(2, ps.getDuzina());
-           p.setDouble(3, ps.getRadijus());
-           p.setString(4, ps.getVezovi());
-           p.setString(5, ps.getTipSkija().getTipSkijaID());
-           p.executeUpdate();
-           p.close();
-       }
-       //ALTER TABLE users ADD id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-        //ADD INDEX (id);
+
+    public void kreirajParSkija(ParSkija ps) {
+        try {
+            String sql = "INSERT INTO parskija VALUES (?,?,?,?,?)";
+            PreparedStatement p = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+            p.setInt(1, ps.getParSkijaID());
+            p.setInt(2, ps.getDuzina());
+            p.setDouble(3, ps.getRadijus());
+            p.setString(4, ps.getVezovi());
+            p.setString(5, ps.getTipSkija().getTipSkijaID());
+            p.executeUpdate();
+            ResultSet rs = p.getGeneratedKeys();
+            int newId = -1;
+            if (rs != null && rs.next()) {
+                newId = rs.getInt(1);
+                ps.setParSkijaID(newId);
+            }
+            
+            p.close();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "greska");
+        }
+    }
 
     public LinkedList<TipSkija> vratiListuTipovaSkija() throws SQLException {
         LinkedList<TipSkija> lts = new LinkedList<>();
         String sql = "SELECT * FROM tipskija";
         Statement st = connection.createStatement();
         ResultSet rs = st.executeQuery(sql);
-        while(rs.next()){
+        while (rs.next()) {
             String TipSkijaID = rs.getString("TipSkijaID");
             String NazivTipa = rs.getString("NazivTipa");
             TipSkija ts = new TipSkija(TipSkijaID, NazivTipa);
@@ -77,8 +87,7 @@ public class DBBroker {
         }
         st.close();
         return lts;
-        
+
     }
-  
 
 }

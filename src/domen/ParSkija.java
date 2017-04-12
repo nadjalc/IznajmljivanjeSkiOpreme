@@ -10,7 +10,7 @@ package domen;
  * @author Nadja
  */
 public class ParSkija {
-    private String parSkijaID;
+    private int parSkijaID;
     private int duzina;
     private double radijus;
     private String vezovi;
@@ -28,7 +28,7 @@ public class ParSkija {
     }
     
 
-    public ParSkija(String parSkijaID, int duzina, double radijus, String vezovi, TipSkija tipSkija) {
+    public ParSkija(int parSkijaID, int duzina, double radijus, String vezovi, TipSkija tipSkija) {
         this.parSkijaID = parSkijaID;
         this.duzina = duzina;
         this.radijus = radijus;
@@ -36,11 +36,11 @@ public class ParSkija {
         this.tipSkija = tipSkija;
     }
 
-    public String getParSkijaID() {
+    public int getParSkijaID() {
         return parSkijaID;
     }
 
-    public void setParSkijaID(String parSkijaID) {
+    public void setParSkijaID(int parSkijaID) {
         this.parSkijaID = parSkijaID;
     }
 
