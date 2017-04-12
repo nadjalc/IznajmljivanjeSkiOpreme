@@ -55,6 +55,13 @@ public class FrmUnosParaSkija extends javax.swing.JDialog {
 
         jLabel1.setText("Par skija ID");
 
+        jTextFieldID.setEditable(false);
+        jTextFieldID.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextFieldIDActionPerformed(evt);
+            }
+        });
+
         jLabel2.setText("Dužina skija");
 
         jLabel3.setText("Radijus");
@@ -153,6 +160,10 @@ public class FrmUnosParaSkija extends javax.swing.JDialog {
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void jTextFieldIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldIDActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextFieldIDActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

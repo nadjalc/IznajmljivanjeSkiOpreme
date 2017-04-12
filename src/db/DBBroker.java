@@ -61,6 +61,8 @@ public class DBBroker {
            p.executeUpdate();
            p.close();
        }
+       //ALTER TABLE users ADD id INT UNSIGNED NOT NULL AUTO_INCREMENT,
+        //ADD INDEX (id);
 
     public LinkedList<TipSkija> vratiListuTipovaSkija() throws SQLException {
         LinkedList<TipSkija> lts = new LinkedList<>();
