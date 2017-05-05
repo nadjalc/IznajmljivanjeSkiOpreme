@@ -10,6 +10,7 @@ import domen.ParSkija;
 import domen.TipSkija;
 import java.sql.SQLException;
 import java.util.LinkedList;
+import java.util.Set;
 import kolekcije.KolekcijaSkija;
 
 /**
@@ -23,12 +24,16 @@ public class Kontroler {
     private static Kontroler instance;
 
     private Kontroler() {
+        System.out.println("Kontroler konstruktor");
+        dbBroker = DBBroker.vratiBrokera();
         ks = new KolekcijaSkija();
-        dbBroker = new DBBroker();
+        ks.setLs(this.vratiParoveIzBaze());
+        System.out.println("Kraj kontruktora kontrolera");
     }
 
     public static Kontroler getInstance() {
         if (instance == null) {
+            System.out.println("Pravim kontrolera prvi put");
             instance = new Kontroler();
         }
         return instance;
@@ -37,8 +42,8 @@ public class Kontroler {
     public void sacuvajParSkija(ParSkija ps) throws SQLException {
         dbBroker.kreirajParSkija(ps);
     }
-    
-    public LinkedList<ParSkija> vratiSkije(){
+
+    public LinkedList<ParSkija> vratiSkije() {
         return ks.vratiSkije();
     }
 
@@ -48,6 +53,10 @@ public class Kontroler {
 
     public LinkedList<ParSkija> vratiParoveIzBaze() {
         return dbBroker.vratiParoveIzBaze();
+    }
+
+    public KolekcijaSkija getKs() {
+        return ks;
     }
 
 }

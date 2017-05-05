@@ -9,6 +9,7 @@ import domen.ParSkija;
 import java.util.LinkedList;
 import javax.swing.table.AbstractTableModel;
 import kolekcije.KolekcijaSkija;
+import poslovnaLogika.Kontroler;
 
 /**
  *
@@ -20,11 +21,7 @@ public class Model extends AbstractTableModel {
     private String[] kolone = new String[]{"ParSkijaID", "DuzinaSkija", "Radijus", "Vezovi", "TipSkija"};
 
     public Model() {
-        ks = new KolekcijaSkija();
-    }
-
-    public Model(KolekcijaSkija ks) {
-        this.ks = ks;
+        ks = Kontroler.getInstance().getKs();
     }
 
     public LinkedList<ParSkija> listaParova() {

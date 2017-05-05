@@ -20,10 +20,8 @@ public class KolekcijaSkija {
     public KolekcijaSkija(LinkedList<ParSkija> ls) {
         this.ls = ls;
     }
-    
 
     public KolekcijaSkija() {
-        ls = Kontroler.getInstance().vratiParoveIzBaze();
     }
 
     
@@ -32,4 +30,8 @@ public class KolekcijaSkija {
 
     }
 
+    public void setLs(LinkedList<ParSkija> ls) {
+        this.ls = ls;
+    }
+    
 }

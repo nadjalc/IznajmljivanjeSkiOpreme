@@ -29,7 +29,7 @@ public class DBBroker {
     private static DBBroker instanca;
     private Connection connection;
 
-    public DBBroker() {
+    private DBBroker() {
         try {
             DBUtil dbUtil = new DBUtil();
             String url = dbUtil.vratiURL();
@@ -45,7 +45,6 @@ public class DBBroker {
 
     public static DBBroker vratiBrokera() {
         if (instanca == null) {
-
             instanca = new DBBroker();
         }
         return instanca;
@@ -67,7 +66,6 @@ public class DBBroker {
                 newId = rs.getInt(1);
                 ps.setParSkijaID(newId);
             }
-
             p.close();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage());
@@ -118,6 +116,7 @@ public class DBBroker {
                 ParSkija ps = new ParSkija(parSkija, duzina, radijus, vezovi, t);
                 parovi.add(ps);
             }
+            st.close();
         } catch (SQLException ex) {
             Logger.getLogger(DBBroker.class.getName()).log(Level.SEVERE, null, ex);
         }

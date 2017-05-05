@@ -185,8 +185,11 @@ public class FrmUnosParaSkija extends javax.swing.JDialog {
     private void srediFormu() {
         jComboBox1.removeAllItems();
         try {
-           
+            System.out.println("Dobacanje kontrolera");
+            Kontroler kon = Kontroler.getInstance();
+            System.out.println("Ocitavanje liste skija");
             LinkedList<TipSkija> lts = Kontroler.getInstance().vratiListuTipovaSkija();
+            System.out.println("Proslo ucitavanje liste skija");
             for (TipSkija lt : lts) {
                 jComboBox1.addItem(lt);
             }
