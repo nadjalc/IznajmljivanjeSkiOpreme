@@ -67,27 +67,61 @@ public class DBBroker {
                 newId = rs.getInt(1);
                 ps.setParSkijaID(newId);
             }
-            
+
             p.close();
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "greska");
+            JOptionPane.showMessageDialog(null, ex.getMessage());
         }
     }
 
-    public LinkedList<TipSkija> vratiListuTipovaSkija() throws SQLException {
+    public LinkedList<TipSkija> vratiListuTipovaSkija() {
         LinkedList<TipSkija> lts = new LinkedList<>();
         String sql = "SELECT * FROM tipskija";
-        Statement st = connection.createStatement();
-        ResultSet rs = st.executeQuery(sql);
-        while (rs.next()) {
-            String TipSkijaID = rs.getString("TipSkijaID");
-            String NazivTipa = rs.getString("NazivTipa");
-            TipSkija ts = new TipSkija(TipSkijaID, NazivTipa);
-            lts.add(ts);
+        try {
+
+            Statement st = connection.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            while (rs.next()) {
+                String TipSkijaID = rs.getString("TipSkijaID");
+                String NazivTipa = rs.getString("NazivTipa");
+                TipSkija ts = new TipSkija(TipSkijaID, NazivTipa);
+                lts.add(ts);
+            }
+            st.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DBBroker.class.getName()).log(Level.SEVERE, null, ex);
         }
-        st.close();
         return lts;
 
+    }
+    public LinkedList<ParSkija> vratiParoveIzBaze(){
+        LinkedList<ParSkija> parovi = new LinkedList<>();
+        LinkedList<TipSkija> ts = vratiListuTipovaSkija();
+        String sql = "SELECT * FROM parskija";
+        try {
+            Statement st = connection.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            while (rs.next()) {                
+                int parSkija = rs.getInt("ParSkijaID");
+                int duzina = rs.getInt("Duzina");
+                double radijus = rs.getDouble("Radijus");
+                String vezovi = rs.getString("Vezovi");
+                String tipSkijaID = rs.getString("TipSkijaID");
+                TipSkija t = new TipSkija();
+                for (TipSkija t1 : ts) {
+                    if(tipSkijaID.equals(t1.getTipSkijaID())){
+                        t = t1;
+                        break;
+                    }
+                }
+                
+                ParSkija ps = new ParSkija(parSkija, duzina, radijus, vezovi, t);
+                parovi.add(ps);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(DBBroker.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return parovi;
     }
 
 }

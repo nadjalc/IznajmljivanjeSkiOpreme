@@ -7,22 +7,29 @@ package kolekcije;
 
 import domen.ParSkija;
 import java.util.LinkedList;
+import poslovnaLogika.Kontroler;
 
 /**
  *
  * @author Nadja
  */
 public class KolekcijaSkija {
-    
+
     private LinkedList<ParSkija> ls;
+
+    public KolekcijaSkija(LinkedList<ParSkija> ls) {
+        this.ls = ls;
+    }
     
+
     public KolekcijaSkija() {
-        ls = new LinkedList<>();
+        ls = Kontroler.getInstance().vratiParoveIzBaze();
     }
-    public void sacuvajParSkija(ParSkija ps){
-        ls.add(ps);
-    }
-    public LinkedList<ParSkija> vratiSkije(){
+
+    
+    public LinkedList<ParSkija> vratiSkije() {
         return ls;
+
     }
+
 }

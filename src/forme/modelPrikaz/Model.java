@@ -8,26 +8,35 @@ package forme.modelPrikaz;
 import domen.ParSkija;
 import java.util.LinkedList;
 import javax.swing.table.AbstractTableModel;
+import kolekcije.KolekcijaSkija;
 
 /**
  *
  * @author Nadja
  */
-public class Model extends AbstractTableModel{
-    
-    private LinkedList<ParSkija> ls;
-    private String[] kolone  = new String[]{"ParSkijaID","DuzinaSkija", "Radijus", "Vezovi", "TipSkija"};
+public class Model extends AbstractTableModel {
 
-    public Model(LinkedList<ParSkija> ls) {
-        this.ls = ls;
+    private KolekcijaSkija ks;
+    private String[] kolone = new String[]{"ParSkijaID", "DuzinaSkija", "Radijus", "Vezovi", "TipSkija"};
+
+    public Model() {
+        ks = new KolekcijaSkija();
+    }
+
+    public Model(KolekcijaSkija ks) {
+        this.ks = ks;
+    }
+
+    public LinkedList<ParSkija> listaParova() {
+        return ks.vratiSkije();
     }
 
     @Override
     public int getRowCount() {
-        if(ls == null){
+        if (listaParova() == null) {
             return 0;
         }
-        return ls.size();
+        return listaParova().size();
     }
 
     @Override
@@ -37,8 +46,8 @@ public class Model extends AbstractTableModel{
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        ParSkija ps = ls.get(rowIndex);
-        switch(columnIndex){
+        ParSkija ps = listaParova().get(rowIndex);
+        switch (columnIndex) {
             case 0:
                 return ps.getParSkijaID();
             case 1:
@@ -63,11 +72,12 @@ public class Model extends AbstractTableModel{
     public String getColumnName(int column) {
         return kolone[column];
     }
-    
-    public ParSkija getParSkija(int br){
-        return ls.get(br);
+
+    public ParSkija getParSkija(int br) {
+        return listaParova().get(br);
     }
-    public void deleteParSkija(int br){
-        ls.remove(br);
+
+    public void deleteParSkija(int br) {
+        listaParova().remove(br);
     }
 }

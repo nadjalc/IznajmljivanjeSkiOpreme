@@ -5,6 +5,7 @@
  */
 package forma.parSkija;
 
+import db.DBBroker;
 import domen.ParSkija;
 import domen.TipSkija;
 import java.awt.Frame;
@@ -143,13 +144,13 @@ public class FrmUnosParaSkija extends javax.swing.JDialog {
 
     private void jButtonUnosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUnosActionPerformed
         try {
-            int parSkijaID = Integer.parseInt(jTextFieldID.getText().trim());
+//            int parSkijaID = Integer.parseInt(jTextFieldID.getText().trim());
             int duzina = Integer.parseInt(jTextFieldDuzina.getText().trim());
             double radijus = Double.parseDouble(jTextFieldRadijus.getText().trim());
             String vezovi = jTextFieldVezovi.getText().trim();
             TipSkija tipSkija = (TipSkija) jComboBox1.getSelectedItem();
 
-            ParSkija ps = new ParSkija(parSkijaID, duzina, radijus, vezovi, tipSkija);
+            ParSkija ps = new ParSkija(0, duzina, radijus, vezovi, tipSkija);
             Kontroler.getInstance().sacuvajParSkija(ps);
             JOptionPane.showMessageDialog(this, "Par skija je sacuvan");
 
@@ -184,12 +185,13 @@ public class FrmUnosParaSkija extends javax.swing.JDialog {
     private void srediFormu() {
         jComboBox1.removeAllItems();
         try {
-            //        jComboBox1.addItem(new TipSkija("01", "Karving"));
-//        jComboBox1.addItem(new TipSkija("02", "Slalom"));
+           
             LinkedList<TipSkija> lts = Kontroler.getInstance().vratiListuTipovaSkija();
             for (TipSkija lt : lts) {
                 jComboBox1.addItem(lt);
             }
+                    System.out.println(lts.size());
+
         } catch (SQLException ex) {
             Logger.getLogger(FrmUnosParaSkija.class.getName()).log(Level.SEVERE, null, ex);
         }
