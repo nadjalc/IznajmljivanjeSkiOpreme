@@ -1,3 +1,6 @@
 /build/
 /dist/
 /nbproject/
+/IznajmljivanjeOpreme/nbproject/private/
+build.xml
+manifest.mf
