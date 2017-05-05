@@ -33,7 +33,7 @@ public class Kontroler {
     }
 
     public void sacuvajParSkija(ParSkija ps) throws SQLException {
-//        ks.sacuvajParSkija(ps);
+        ks.sacuvajParSkija(ps);
         dbBroker.kreirajParSkija(ps);
     }
     
@@ -43,6 +43,10 @@ public class Kontroler {
 
     public LinkedList<TipSkija> vratiListuTipovaSkija() throws SQLException {
         return dbBroker.vratiListuTipovaSkija();
+    }
+    
+    public LinkedList<ParSkija> vratiParoveIzBaze(){
+        return dbBroker.vratiParoveIzBaze();
     }
     
 }

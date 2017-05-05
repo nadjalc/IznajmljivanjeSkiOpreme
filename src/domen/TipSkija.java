@@ -15,6 +15,10 @@ public class TipSkija {
     private String tipSkijaID;
     private String nazivTipa;
 
+    public TipSkija() {
+    }
+    
+
     public TipSkija(String tipSkijaID, String nazivTipa) {
         this.tipSkijaID = tipSkijaID;
         this.nazivTipa = nazivTipa;

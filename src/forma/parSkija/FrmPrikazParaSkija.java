@@ -120,6 +120,8 @@ public class FrmPrikazParaSkija extends javax.swing.JDialog {
      */
     private void srediFormu() {
         LinkedList<ParSkija> ls = Kontroler.getInstance().vratiSkije();
+                System.out.println(ls.size());
+
         Model m = new Model(ls);
         jTablePrikaz.setModel(m);
     }
