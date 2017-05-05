@@ -9,6 +9,7 @@ package forma.parSkija;
 import domen.ParSkija;
 import forme.modelPrikaz.Model;
 import java.util.LinkedList;
+import kolekcije.KolekcijaSkija;
 import poslovnaLogika.Kontroler;
 
 /**
@@ -119,11 +120,9 @@ public class FrmPrikazParaSkija extends javax.swing.JDialog {
      * @param args the command line arguments
      */
     private void srediFormu() {
-        LinkedList<ParSkija> ls = Kontroler.getInstance().vratiSkije();
-                System.out.println(ls.size());
-
-        Model m = new Model(ls);
-        jTablePrikaz.setModel(m);
+       Model m = new Model();
+       jTablePrikaz.setModel(m);
+       
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -109,7 +109,7 @@ public class DBBroker {
                 String tipSkijaID = rs.getString("TipSkijaID");
                 TipSkija t = new TipSkija();
                 for (TipSkija t1 : ts) {
-                    if(tipSkijaID == t1.getTipSkijaID()){
+                    if(tipSkijaID.equals(t1.getTipSkijaID())){
                         t = t1;
                         break;
                     }
