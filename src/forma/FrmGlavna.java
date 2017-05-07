@@ -8,6 +8,7 @@ package forma;
 import forma.parSkija.FrmPrikazParaSkija;
 import forma.parSkija.FrmUnosParaSkija;
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import javax.swing.JDialog;
 
 /**
@@ -38,8 +39,9 @@ public class FrmGlavna extends javax.swing.JFrame {
         jMenuItem2 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Iznajmljivanje Skijaške opreme");
 
-        jMenu1.setText("Iznajmjivanje skijaške opreme");
+        jMenu1.setText("Održavanje kolekcije skija");
 
         jMenuItem1.setText("Unos para skija");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
@@ -65,25 +67,27 @@ public class FrmGlavna extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGap(0, 559, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 279, Short.MAX_VALUE)
+            .addGap(0, 395, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        FrmUnosParaSkija f = new FrmUnosParaSkija(this, true);
+        FrmUnosParaSkija f = new FrmUnosParaSkija(this, true, "unos");
+        f.setLocationRelativeTo(null);
         f.setVisible(true);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         FrmPrikazParaSkija f = new FrmPrikazParaSkija(this, true);
+        f.setLocationRelativeTo(null);
         f.setVisible(true);
-        
+
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**
@@ -117,7 +121,9 @@ public class FrmGlavna extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FrmGlavna().setVisible(true);
+                FrmGlavna frm = new FrmGlavna();
+                frm.setLocationRelativeTo(null);
+                frm.setVisible(true);
             }
         });
     }

@@ -23,15 +23,22 @@ public class KolekcijaSkija {
 
     public KolekcijaSkija() {
     }
-
     
     public LinkedList<ParSkija> vratiSkije() {
         return ls;
-
+    }
+    
+    public void dodajUListu(ParSkija ps){
+        ls.add(ps);
     }
 
     public void setLs(LinkedList<ParSkija> ls) {
         this.ls = ls;
     }
+
+    public void obrisi(ParSkija ps) {
+        ls.remove(ps);
+    }
+    
     
 }

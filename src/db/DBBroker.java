@@ -29,7 +29,7 @@ public class DBBroker {
     private static DBBroker instanca;
     private Connection connection;
 
-    private DBBroker() {
+    public DBBroker() {
         try {
             DBUtil dbUtil = new DBUtil();
             String url = dbUtil.vratiURL();
@@ -49,9 +49,10 @@ public class DBBroker {
         }
         return instanca;
     }
-
-    public void kreirajParSkija(ParSkija ps) {
-        try {
+    
+     public void sacuvajSveSkije(LinkedList<ParSkija> sveSkije) {
+        for (ParSkija ps : sveSkije) {
+            try {
             String sql = "INSERT INTO parskija VALUES (?,?,?,?,?)";
             PreparedStatement p = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             p.setInt(1, ps.getParSkijaID());
@@ -70,7 +71,31 @@ public class DBBroker {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage());
         }
+        }
     }
+
+
+//    public void kreirajParSkija(ParSkija ps) {
+//        try {
+//            String sql = "INSERT INTO parskija VALUES (?,?,?,?,?)";
+//            PreparedStatement p = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+//            p.setInt(1, ps.getParSkijaID());
+//            p.setInt(2, ps.getDuzina());
+//            p.setDouble(3, ps.getRadijus());
+//            p.setString(4, ps.getVezovi());
+//            p.setString(5, ps.getTipSkija().getTipSkijaID());
+//            p.executeUpdate();
+//            ResultSet rs = p.getGeneratedKeys();
+//            int newId = -1;
+//            if (rs != null && rs.next()) {
+//                newId = rs.getInt(1);
+//                ps.setParSkijaID(newId);
+//            }
+//            p.close();
+//        } catch (SQLException ex) {
+//            JOptionPane.showMessageDialog(null, ex.getMessage());
+//        }
+//    }
 
     public LinkedList<TipSkija> vratiListuTipovaSkija() {
         LinkedList<TipSkija> lts = new LinkedList<>();
@@ -122,5 +147,17 @@ public class DBBroker {
         }
         return parovi;
     }
+    
+    public void obrisiSveIzBaze(){
+        String sql = "DELETE FROM parskija";
+        try {
+            Statement st = connection.createStatement();
+            st.executeUpdate(sql);
+            st.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(DBBroker.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
+   
 }

@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.jws.WebParam;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import poslovnaLogika.Kontroler;
@@ -23,17 +24,20 @@ import poslovnaLogika.Kontroler;
  */
 public class FrmUnosParaSkija extends javax.swing.JDialog {
 
-    public FrmUnosParaSkija(Frame parent, boolean modal) {
+    public FrmUnosParaSkija(Frame parent, boolean modal, String mode) {
         super(parent, modal);
         initComponents();
-        srediFormu();
+        srediFormu(mode);
     }
+    FrmPrikazParaSkija pf;
 
-    public FrmUnosParaSkija(JDialog parent, boolean modal, ParSkija ps) {
+    public FrmUnosParaSkija(JDialog parent, boolean modal, ParSkija ps, String mode) {
         super(parent, modal);
         initComponents();
-        srediFormu();
+        srediFormu(mode);
         popuniPolja(ps);
+        pf = (FrmPrikazParaSkija) parent;
+
     }
 
     @SuppressWarnings("unchecked")
@@ -41,26 +45,29 @@ public class FrmUnosParaSkija extends javax.swing.JDialog {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jTextFieldID = new javax.swing.JTextField();
+        txtID = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jTextFieldDuzina = new javax.swing.JTextField();
+        txtDuzna = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jTextFieldRadijus = new javax.swing.JTextField();
+        txtRadijus = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jTextFieldVezovi = new javax.swing.JTextField();
-        jButtonUnos = new javax.swing.JButton();
+        txtVezovi = new javax.swing.JTextField();
+        btnUnos = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox();
+        cmbTipSkija = new javax.swing.JComboBox();
+        btnIzmeni = new javax.swing.JButton();
+        btnObrisi = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Podešavanje podataka o parovima skija");
 
         jLabel1.setText("Par skija ID");
 
-        jTextFieldID.setEditable(false);
-        jTextFieldID.setBackground(new java.awt.Color(255, 255, 255));
-        jTextFieldID.addActionListener(new java.awt.event.ActionListener() {
+        txtID.setEditable(false);
+        txtID.setBackground(new java.awt.Color(255, 255, 255));
+        txtID.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextFieldIDActionPerformed(evt);
+                txtIDActionPerformed(evt);
             }
         });
 
@@ -70,19 +77,33 @@ public class FrmUnosParaSkija extends javax.swing.JDialog {
 
         jLabel4.setText("Vezovi");
 
-        jButtonUnos.setText("Unesi par skija");
-        jButtonUnos.addActionListener(new java.awt.event.ActionListener() {
+        btnUnos.setText("Unesi par skija");
+        btnUnos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonUnosActionPerformed(evt);
+                btnUnosActionPerformed(evt);
             }
         });
 
         jLabel5.setText("Tip skija");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        cmbTipSkija.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cmbTipSkija.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                cmbTipSkijaActionPerformed(evt);
+            }
+        });
+
+        btnIzmeni.setText("Izmeni par skija");
+        btnIzmeni.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnIzmeniActionPerformed(evt);
+            }
+        });
+
+        btnObrisi.setText("Obriši par skija");
+        btnObrisi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnObrisiActionPerformed(evt);
             }
         });
 
@@ -90,26 +111,32 @@ public class FrmUnosParaSkija extends javax.swing.JDialog {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(135, Short.MAX_VALUE)
-                .addComponent(jButtonUnos, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(103, 103, 103))
             .addGroup(layout.createSequentialGroup()
-                .addGap(21, 21, 21)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel5))
-                .addGap(28, 28, 28)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jTextFieldID)
-                    .addComponent(jTextFieldDuzina)
-                    .addComponent(jTextFieldRadijus)
-                    .addComponent(jTextFieldVezovi, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
-                    .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel1)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5))
+                        .addGap(28, 28, 28)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtRadijus)
+                            .addComponent(txtDuzna)
+                            .addComponent(txtID)
+                            .addComponent(txtVezovi)
+                            .addComponent(cmbTipSkija, 0, 378, Short.MAX_VALUE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(142, 142, 142)
+                        .addComponent(btnIzmeni)
+                        .addGap(58, 58, 58)
+                        .addComponent(btnObrisi))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(202, 202, 202)
+                        .addComponent(btnUnos, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(84, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -117,73 +144,148 @@ public class FrmUnosParaSkija extends javax.swing.JDialog {
                 .addGap(21, 21, 21)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jTextFieldID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextFieldDuzina, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtDuzna, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextFieldRadijus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtRadijus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jTextFieldVezovi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtVezovi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(cmbTipSkija, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
-                .addComponent(jButtonUnos)
-                .addGap(41, 41, 41))
+                .addGap(87, 87, 87)
+                .addComponent(btnUnos)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnIzmeni)
+                    .addComponent(btnObrisi))
+                .addGap(52, 52, 52))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButtonUnosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonUnosActionPerformed
+    private void btnUnosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnosActionPerformed
+
         try {
-//            int parSkijaID = Integer.parseInt(jTextFieldID.getText().trim());
-            int duzina = Integer.parseInt(jTextFieldDuzina.getText().trim());
-            double radijus = Double.parseDouble(jTextFieldRadijus.getText().trim());
-            String vezovi = jTextFieldVezovi.getText().trim();
-            TipSkija tipSkija = (TipSkija) jComboBox1.getSelectedItem();
+            int duzina = Integer.parseInt(txtDuzna.getText().trim());
+            double radijus = Double.parseDouble(txtRadijus.getText().trim());
+            String vezovi = txtVezovi.getText().trim();
+            TipSkija tipSkija = (TipSkija) cmbTipSkija.getSelectedItem();
 
             ParSkija ps = new ParSkija(0, duzina, radijus, vezovi, tipSkija);
+            Kontroler.getInstance().obrisiSveIzBaze();
             Kontroler.getInstance().sacuvajParSkija(ps);
+            LinkedList<ParSkija> sveSkije = Kontroler.getInstance().vratiSkije();
+            Kontroler.getInstance().sacuvajSveSkije(sveSkije);
             JOptionPane.showMessageDialog(this, "Par skija je sacuvan");
 
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Par skija nije sacuvan " + e.getMessage());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Par skija nije sacuvan morate uneti broj za duzinu skija"
+                    + " i broj koji moze biti u decimalnom formatu za radijus");
+        } catch (SQLException ex) {
+            Logger.getLogger(FrmUnosParaSkija.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jButtonUnosActionPerformed
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
 
-    private void jTextFieldIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextFieldIDActionPerformed
+    }//GEN-LAST:event_btnUnosActionPerformed
+
+    private void cmbTipSkijaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTipSkijaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextFieldIDActionPerformed
+    }//GEN-LAST:event_cmbTipSkijaActionPerformed
+
+    private void txtIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIDActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtIDActionPerformed
+
+    private void btnObrisiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnObrisiActionPerformed
+        // TODO add your handling code here:
+        LinkedList<ParSkija> sveSkije = Kontroler.getInstance().vratiSkije();
+        try {
+            int parSkijaID = Integer.parseInt(txtID.getText().trim());
+
+            for (ParSkija parSkija : sveSkije) {
+                if (parSkija.getParSkijaID() == parSkijaID) {
+                    pf.obrisi(parSkija);
+                    //Kontroler.getInstance().obrisiIzListe(parSkija);
+                    break;
+                }
+
+            }
+            Kontroler.getInstance().obrisiSveIzBaze();
+            LinkedList<ParSkija> izmenjenSkije = Kontroler.getInstance().vratiSkije();
+            Kontroler.getInstance().sacuvajSveSkije(izmenjenSkije);
+            JOptionPane.showMessageDialog(this, "Par skija je uspesno obrisan");
+            pf.zatvori();
+           
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Par skija nije sacuvan morate uneti broj za duzinu skija"
+                    + " i broj koji moze biti u decimalnom formatu za radijus");
+        }
+
+
+    }//GEN-LAST:event_btnObrisiActionPerformed
+
+    private void btnIzmeniActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIzmeniActionPerformed
+        // TODO add your handling code here:
+        LinkedList<ParSkija> sveSkije = Kontroler.getInstance().vratiSkije();
+        try {
+            int parSkijaID = Integer.parseInt(txtID.getText().trim());
+            int duzina = Integer.parseInt(txtDuzna.getText().trim());
+            double radijus = Double.parseDouble(txtRadijus.getText().trim());
+            String vezovi = txtVezovi.getText().trim();
+            TipSkija tipSkija = (TipSkija) cmbTipSkija.getSelectedItem();
+
+            ParSkija parS = new ParSkija(parSkijaID, duzina, radijus, vezovi, tipSkija);
+            for (ParSkija ps : sveSkije) {
+                if (ps.getParSkijaID() == parSkijaID) {
+                    Kontroler.getInstance().obrisiIzListe(ps);
+                    break;
+                }
+            }
+            Kontroler.getInstance().obrisiSveIzBaze();
+            pf.sacuvaj(parS);
+            //Kontroler.getInstance().sacuvajParSkija(parS);
+            LinkedList<ParSkija> izmenjenSkije = Kontroler.getInstance().vratiSkije();
+            Kontroler.getInstance().sacuvajSveSkije(izmenjenSkije);
+            JOptionPane.showMessageDialog(this, "Par skija je uspesno izmenjen");
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Par skija nije sacuvan morate uneti broj za duzinu skija"
+                    + " i broj koji moze biti u decimalnom formatu za radijus");
+        } catch (SQLException ex) {
+            Logger.getLogger(FrmUnosParaSkija.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnIzmeniActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButtonUnos;
-    private javax.swing.JComboBox jComboBox1;
+    private javax.swing.JButton btnIzmeni;
+    private javax.swing.JButton btnObrisi;
+    private javax.swing.JButton btnUnos;
+    private javax.swing.JComboBox cmbTipSkija;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JTextField jTextFieldDuzina;
-    private javax.swing.JTextField jTextFieldID;
-    private javax.swing.JTextField jTextFieldRadijus;
-    private javax.swing.JTextField jTextFieldVezovi;
+    private javax.swing.JTextField txtDuzna;
+    private javax.swing.JTextField txtID;
+    private javax.swing.JTextField txtRadijus;
+    private javax.swing.JTextField txtVezovi;
     // End of variables declaration//GEN-END:variables
 
-    private void srediFormu() {
-        jComboBox1.removeAllItems();
+    private void srediFormu(String mode) {
+        cmbTipSkija.removeAllItems();
         try {
             System.out.println("Dobacanje kontrolera");
             Kontroler kon = Kontroler.getInstance();
@@ -191,22 +293,32 @@ public class FrmUnosParaSkija extends javax.swing.JDialog {
             LinkedList<TipSkija> lts = Kontroler.getInstance().vratiListuTipovaSkija();
             System.out.println("Proslo ucitavanje liste skija");
             for (TipSkija lt : lts) {
-                jComboBox1.addItem(lt);
+                cmbTipSkija.addItem(lt);
             }
-                    System.out.println(lts.size());
+
+            String status = mode;
+            if (status.equals("unos")) {
+                btnUnos.setVisible(true);
+                btnIzmeni.setVisible(false);
+                btnObrisi.setVisible(false);
+            } else if (status.equals("izmene")) {
+                btnUnos.setVisible(false);
+                btnIzmeni.setVisible(true);
+                btnObrisi.setVisible(true);
+            }
 
         } catch (SQLException ex) {
             Logger.getLogger(FrmUnosParaSkija.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
     }
 
     private void popuniPolja(ParSkija ps) {
-        jTextFieldID.setText(Integer.toString(ps.getParSkijaID()));
-        jTextFieldDuzina.setText(Integer.toString(ps.getDuzina()));
-        jTextFieldRadijus.setText(Double.toString(ps.getRadijus()));
-        jTextFieldVezovi.setText(ps.getVezovi());
-        jComboBox1.setSelectedItem(ps.getTipSkija());
+        txtID.setText(Integer.toString(ps.getParSkijaID()));
+        txtDuzna.setText(Integer.toString(ps.getDuzina()));
+        txtRadijus.setText(Double.toString(ps.getRadijus()));
+        txtVezovi.setText(ps.getVezovi());
+        cmbTipSkija.setSelectedItem(ps.getTipSkija());
 
     }
 }

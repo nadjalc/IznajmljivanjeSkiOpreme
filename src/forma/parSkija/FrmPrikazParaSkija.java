@@ -8,7 +8,9 @@ package forma.parSkija;
 
 import domen.ParSkija;
 import forme.modelPrikaz.Model;
+import java.sql.SQLException;
 import java.util.LinkedList;
+import javax.swing.JOptionPane;
 import kolekcije.KolekcijaSkija;
 import poslovnaLogika.Kontroler;
 
@@ -33,10 +35,10 @@ public class FrmPrikazParaSkija extends javax.swing.JDialog {
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTablePrikaz = new javax.swing.JTable();
-        jBtnIzmeni = new javax.swing.JButton();
-        jBtnObrisi = new javax.swing.JButton();
+        btnDetalji = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Prikaz svih parova skija");
 
         jTablePrikaz.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -51,17 +53,10 @@ public class FrmPrikazParaSkija extends javax.swing.JDialog {
         ));
         jScrollPane1.setViewportView(jTablePrikaz);
 
-        jBtnIzmeni.setText("Izmeni");
-        jBtnIzmeni.addActionListener(new java.awt.event.ActionListener() {
+        btnDetalji.setText("Detalji");
+        btnDetalji.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBtnIzmeniActionPerformed(evt);
-            }
-        });
-
-        jBtnObrisi.setText("Obrisi");
-        jBtnObrisi.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBtnObrisiActionPerformed(evt);
+                btnDetaljiActionPerformed(evt);
             }
         });
 
@@ -69,21 +64,19 @@ public class FrmPrikazParaSkija extends javax.swing.JDialog {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jBtnObrisi)
-                .addGap(18, 18, 18)
-                .addComponent(jBtnIzmeni))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 579, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(btnDetalji)
+                .addGap(24, 24, 24))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 271, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 363, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jBtnIzmeni)
-                    .addComponent(jBtnObrisi)))
+                .addComponent(btnDetalji)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -100,21 +93,19 @@ public class FrmPrikazParaSkija extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jBtnIzmeniActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnIzmeniActionPerformed
+    private void btnDetaljiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDetaljiActionPerformed
         // TODO add your handling code here:
+        try{
         int selected = jTablePrikaz.getSelectedRow();
         Model model = (Model) jTablePrikaz.getModel();
         ParSkija ps = model.getParSkija(selected);
-        FrmUnosParaSkija f = new FrmUnosParaSkija(this, true, ps);
+        FrmUnosParaSkija f = new FrmUnosParaSkija(this, true, ps, "izmene");
+        f.setLocationRelativeTo(null);
         f.setVisible(true);
-    }//GEN-LAST:event_jBtnIzmeniActionPerformed
-
-    private void jBtnObrisiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnObrisiActionPerformed
-        int selected = jTablePrikaz.getSelectedRow();
-        Model model = (Model) jTablePrikaz.getModel();
-        model.deleteParSkija(selected);
-        model.fireTableDataChanged();
-    }//GEN-LAST:event_jBtnObrisiActionPerformed
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(this, "Niste izabrali par skija", "Greska", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnDetaljiActionPerformed
 
     /**
      * @param args the command line arguments
@@ -126,11 +117,25 @@ public class FrmPrikazParaSkija extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jBtnIzmeni;
-    private javax.swing.JButton jBtnObrisi;
+    private javax.swing.JButton btnDetalji;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTablePrikaz;
     // End of variables declaration//GEN-END:variables
+
+    void obrisi(ParSkija parSkija) {
+        Kontroler.getInstance().obrisiIzListe(parSkija);
+        Model m = (Model) jTablePrikaz.getModel();
+        m.fireTableDataChanged();
+    }
+
+    void sacuvaj(ParSkija parS) throws SQLException {
+        Kontroler.getInstance().sacuvajParSkija(parS);
+        Model m = (Model) jTablePrikaz.getModel();
+        m.fireTableDataChanged();
+    }
+
+    void zatvori() {
+    }
 
 }

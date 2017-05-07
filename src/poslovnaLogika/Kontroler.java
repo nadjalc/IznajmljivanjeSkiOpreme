@@ -24,23 +24,20 @@ public class Kontroler {
     private static Kontroler instance;
 
     private Kontroler() {
-        System.out.println("Kontroler konstruktor");
         dbBroker = DBBroker.vratiBrokera();
         ks = new KolekcijaSkija();
         ks.setLs(this.vratiParoveIzBaze());
-        System.out.println("Kraj kontruktora kontrolera");
     }
 
     public static Kontroler getInstance() {
         if (instance == null) {
-            System.out.println("Pravim kontrolera prvi put");
             instance = new Kontroler();
         }
         return instance;
     }
 
     public void sacuvajParSkija(ParSkija ps) throws SQLException {
-        dbBroker.kreirajParSkija(ps);
+        ks.dodajUListu(ps);
     }
 
     public LinkedList<ParSkija> vratiSkije() {
@@ -57,6 +54,18 @@ public class Kontroler {
 
     public KolekcijaSkija getKs() {
         return ks;
+    }
+
+    public void obrisiSveIzBaze() {
+        dbBroker.obrisiSveIzBaze();
+    }
+
+    public void sacuvajSveSkije(LinkedList<ParSkija> sveSkije) {
+        dbBroker.sacuvajSveSkije(sveSkije);
+    }
+
+    public void obrisiIzListe(ParSkija ps) {
+        ks.obrisi(ps);
     }
 
 }
