@@ -57,6 +57,8 @@ public class FrmUnosParaSkija extends javax.swing.JDialog {
         cmbTipSkija = new javax.swing.JComboBox();
         btnIzmeni = new javax.swing.JButton();
         btnObrisi = new javax.swing.JButton();
+        lblMarka = new javax.swing.JLabel();
+        txtMarka = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Podešavanje podataka o parovima skija");
@@ -107,6 +109,8 @@ public class FrmUnosParaSkija extends javax.swing.JDialog {
             }
         });
 
+        lblMarka.setText("Marka");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -120,14 +124,16 @@ public class FrmUnosParaSkija extends javax.swing.JDialog {
                             .addComponent(jLabel2)
                             .addComponent(jLabel3)
                             .addComponent(jLabel4)
-                            .addComponent(jLabel5))
+                            .addComponent(jLabel5)
+                            .addComponent(lblMarka))
                         .addGap(28, 28, 28)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtRadijus)
                             .addComponent(txtDuzna)
                             .addComponent(txtID)
                             .addComponent(txtVezovi)
-                            .addComponent(cmbTipSkija, 0, 378, Short.MAX_VALUE)))
+                            .addComponent(cmbTipSkija, 0, 378, Short.MAX_VALUE)
+                            .addComponent(txtMarka)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(142, 142, 142)
                         .addComponent(btnIzmeni)
@@ -157,13 +163,17 @@ public class FrmUnosParaSkija extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(txtVezovi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(14, 14, 14)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtMarka, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblMarka))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cmbTipSkija, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
-                .addGap(87, 87, 87)
+                .addGap(49, 49, 49)
                 .addComponent(btnUnos)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnIzmeni)
                     .addComponent(btnObrisi))
@@ -174,25 +184,29 @@ public class FrmUnosParaSkija extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnUnosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUnosActionPerformed
+        int result = JOptionPane.showConfirmDialog(this, "Da li ste sigurni da zelite da sacuvate par skija?", "Potvrda", JOptionPane.YES_NO_OPTION);
+        if (result == JOptionPane.YES_OPTION) {
+            try {
+                int duzina = Integer.parseInt(txtDuzna.getText().trim());
+                double radijus = Double.parseDouble(txtRadijus.getText().trim());
+                String vezovi = txtVezovi.getText().trim();
+                String marka = txtMarka.getText().trim();
+                TipSkija tipSkija = (TipSkija) cmbTipSkija.getSelectedItem();
 
-        try {
-            int duzina = Integer.parseInt(txtDuzna.getText().trim());
-            double radijus = Double.parseDouble(txtRadijus.getText().trim());
-            String vezovi = txtVezovi.getText().trim();
-            TipSkija tipSkija = (TipSkija) cmbTipSkija.getSelectedItem();
+                ParSkija ps = new ParSkija(0, duzina, radijus, vezovi, marka, tipSkija);
+                Kontroler.getInstance().obrisiSveIzBaze();
+                Kontroler.getInstance().sacuvajParSkija(ps);
+                LinkedList<ParSkija> sveSkije = Kontroler.getInstance().vratiSkije();
+                Kontroler.getInstance().sacuvajSveSkije(sveSkije);
+                JOptionPane.showMessageDialog(this, "Par skija je sacuvan");
+                this.dispose();
 
-            ParSkija ps = new ParSkija(0, duzina, radijus, vezovi, tipSkija);
-            Kontroler.getInstance().obrisiSveIzBaze();
-            Kontroler.getInstance().sacuvajParSkija(ps);
-            LinkedList<ParSkija> sveSkije = Kontroler.getInstance().vratiSkije();
-            Kontroler.getInstance().sacuvajSveSkije(sveSkije);
-            JOptionPane.showMessageDialog(this, "Par skija je sacuvan");
-
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Par skija nije sacuvan morate uneti broj za duzinu skija"
-                    + " i broj koji moze biti u decimalnom formatu za radijus");
-        } catch (SQLException ex) {
-            Logger.getLogger(FrmUnosParaSkija.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Par skija nije sacuvan morate uneti broj za duzinu skija"
+                        + " i broj koji moze biti u decimalnom formatu za radijus");
+            } catch (SQLException ex) {
+                Logger.getLogger(FrmUnosParaSkija.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
 
 
@@ -209,27 +223,29 @@ public class FrmUnosParaSkija extends javax.swing.JDialog {
     private void btnObrisiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnObrisiActionPerformed
         // TODO add your handling code here:
         LinkedList<ParSkija> sveSkije = Kontroler.getInstance().vratiSkije();
-        try {
-            int parSkijaID = Integer.parseInt(txtID.getText().trim());
+        int result = JOptionPane.showConfirmDialog(this, "Da li ste sigurni da zelite da obrisete par skija?", "Potvrda", JOptionPane.YES_NO_OPTION);
+        if (result == JOptionPane.YES_OPTION) {
+            try {
+                int parSkijaID = Integer.parseInt(txtID.getText().trim());
 
-            for (ParSkija parSkija : sveSkije) {
-                if (parSkija.getParSkijaID() == parSkijaID) {
-                    pf.obrisi(parSkija);
-                    //Kontroler.getInstance().obrisiIzListe(parSkija);
-                    break;
+                for (ParSkija parSkija : sveSkije) {
+                    if (parSkija.getParSkijaID() == parSkijaID) {
+                        pf.obrisi(parSkija);
+                        //Kontroler.getInstance().obrisiIzListe(parSkija);
+                        break;
+                    }
+
                 }
+                Kontroler.getInstance().obrisiSveIzBaze();
+                LinkedList<ParSkija> izmenjenSkije = Kontroler.getInstance().vratiSkije();
+                Kontroler.getInstance().sacuvajSveSkije(izmenjenSkije);
+                JOptionPane.showMessageDialog(this, "Par skija je uspesno obrisan");
+                this.dispose();
 
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Par skija nije sacuvan morate uneti broj za duzinu skija"
+                        + " i broj koji moze biti u decimalnom formatu za radijus");
             }
-            Kontroler.getInstance().obrisiSveIzBaze();
-            LinkedList<ParSkija> izmenjenSkije = Kontroler.getInstance().vratiSkije();
-            Kontroler.getInstance().sacuvajSveSkije(izmenjenSkije);
-            JOptionPane.showMessageDialog(this, "Par skija je uspesno obrisan");
-            pf.zatvori();
-           
-
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Par skija nije sacuvan morate uneti broj za duzinu skija"
-                    + " i broj koji moze biti u decimalnom formatu za radijus");
         }
 
 
@@ -238,32 +254,37 @@ public class FrmUnosParaSkija extends javax.swing.JDialog {
     private void btnIzmeniActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIzmeniActionPerformed
         // TODO add your handling code here:
         LinkedList<ParSkija> sveSkije = Kontroler.getInstance().vratiSkije();
-        try {
-            int parSkijaID = Integer.parseInt(txtID.getText().trim());
-            int duzina = Integer.parseInt(txtDuzna.getText().trim());
-            double radijus = Double.parseDouble(txtRadijus.getText().trim());
-            String vezovi = txtVezovi.getText().trim();
-            TipSkija tipSkija = (TipSkija) cmbTipSkija.getSelectedItem();
+        int result = JOptionPane.showConfirmDialog(this, "Da li ste sigurni da zelite da napravite izmene?", "Potvrda", JOptionPane.YES_NO_OPTION);
+        if (result == JOptionPane.YES_OPTION) {
+            try {
+                int parSkijaID = Integer.parseInt(txtID.getText().trim());
+                int duzina = Integer.parseInt(txtDuzna.getText().trim());
+                double radijus = Double.parseDouble(txtRadijus.getText().trim());
+                String vezovi = txtVezovi.getText().trim();
+                String marka = txtMarka.getText().trim();
+                TipSkija tipSkija = (TipSkija) cmbTipSkija.getSelectedItem();
 
-            ParSkija parS = new ParSkija(parSkijaID, duzina, radijus, vezovi, tipSkija);
-            for (ParSkija ps : sveSkije) {
-                if (ps.getParSkijaID() == parSkijaID) {
-                    Kontroler.getInstance().obrisiIzListe(ps);
-                    break;
+                ParSkija parS = new ParSkija(parSkijaID, duzina, radijus, vezovi, marka, tipSkija);
+                for (ParSkija ps : sveSkije) {
+                    if (ps.getParSkijaID() == parSkijaID) {
+                        Kontroler.getInstance().obrisiIzListe(ps);
+                        break;
+                    }
                 }
-            }
-            Kontroler.getInstance().obrisiSveIzBaze();
-            pf.sacuvaj(parS);
-            //Kontroler.getInstance().sacuvajParSkija(parS);
-            LinkedList<ParSkija> izmenjenSkije = Kontroler.getInstance().vratiSkije();
-            Kontroler.getInstance().sacuvajSveSkije(izmenjenSkije);
-            JOptionPane.showMessageDialog(this, "Par skija je uspesno izmenjen");
+                Kontroler.getInstance().obrisiSveIzBaze();
+                pf.sacuvaj(parS);
+                //Kontroler.getInstance().sacuvajParSkija(parS);
+                LinkedList<ParSkija> izmenjenSkije = Kontroler.getInstance().vratiSkije();
+                Kontroler.getInstance().sacuvajSveSkije(izmenjenSkije);
+                JOptionPane.showMessageDialog(this, "Par skija je uspesno izmenjen");
+                this.dispose();
 
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Par skija nije sacuvan morate uneti broj za duzinu skija"
-                    + " i broj koji moze biti u decimalnom formatu za radijus");
-        } catch (SQLException ex) {
-            Logger.getLogger(FrmUnosParaSkija.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(this, "Par skija nije sacuvan morate uneti broj za duzinu skija"
+                        + " i broj koji moze biti u decimalnom formatu za radijus");
+            } catch (SQLException ex) {
+                Logger.getLogger(FrmUnosParaSkija.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
     }//GEN-LAST:event_btnIzmeniActionPerformed
 
@@ -278,8 +299,10 @@ public class FrmUnosParaSkija extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel lblMarka;
     private javax.swing.JTextField txtDuzna;
     private javax.swing.JTextField txtID;
+    private javax.swing.JTextField txtMarka;
     private javax.swing.JTextField txtRadijus;
     private javax.swing.JTextField txtVezovi;
     // End of variables declaration//GEN-END:variables

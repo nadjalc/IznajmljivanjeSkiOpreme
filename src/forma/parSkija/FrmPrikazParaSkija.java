@@ -135,7 +135,6 @@ public class FrmPrikazParaSkija extends javax.swing.JDialog {
         m.fireTableDataChanged();
     }
 
-    void zatvori() {
-    }
+   
 
 }

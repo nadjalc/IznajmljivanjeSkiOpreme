@@ -14,6 +14,7 @@ public class ParSkija {
     private int duzina;
     private double radijus;
     private String vezovi;
+    private String marka;
     private TipSkija tipSkija;
 
     public TipSkija getTipSkija() {
@@ -26,15 +27,17 @@ public class ParSkija {
 
     public ParSkija() {
     }
-    
 
-    public ParSkija(int parSkijaID, int duzina, double radijus, String vezovi, TipSkija tipSkija) {
+    public ParSkija(int parSkijaID, int duzina, double radijus, String vezovi, String marka, TipSkija tipSkija) {
         this.parSkijaID = parSkijaID;
         this.duzina = duzina;
         this.radijus = radijus;
         this.vezovi = vezovi;
+        this.marka = marka;
         this.tipSkija = tipSkija;
     }
+
+    
 
     public int getParSkijaID() {
         return parSkijaID;
@@ -66,6 +69,14 @@ public class ParSkija {
 
     public void setVezovi(String vezovi) {
         this.vezovi = vezovi;
+    }
+
+    public String getMarka() {
+        return marka;
+    }
+
+    public void setMarka(String marka) {
+        this.marka = marka;
     }
     
     

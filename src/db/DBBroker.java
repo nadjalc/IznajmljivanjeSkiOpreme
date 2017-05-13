@@ -53,13 +53,14 @@ public class DBBroker {
      public void sacuvajSveSkije(LinkedList<ParSkija> sveSkije) {
         for (ParSkija ps : sveSkije) {
             try {
-            String sql = "INSERT INTO parskija VALUES (?,?,?,?,?)";
+            String sql = "INSERT INTO parskija VALUES (?,?,?,?,?,?)";
             PreparedStatement p = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
             p.setInt(1, ps.getParSkijaID());
             p.setInt(2, ps.getDuzina());
             p.setDouble(3, ps.getRadijus());
             p.setString(4, ps.getVezovi());
-            p.setString(5, ps.getTipSkija().getTipSkijaID());
+            p.setString(5, ps.getMarka());
+            p.setString(6, ps.getTipSkija().getTipSkijaID());
             p.executeUpdate();
             ResultSet rs = p.getGeneratedKeys();
             int newId = -1;
@@ -129,6 +130,7 @@ public class DBBroker {
                 int duzina = rs.getInt("Duzina");
                 double radijus = rs.getDouble("Radijus");
                 String vezovi = rs.getString("Vezovi");
+                String marka = rs.getString("Marka");
                 String tipSkijaID = rs.getString("TipSkijaID");
                 TipSkija t = new TipSkija();
                 for (TipSkija t1 : ts) {
@@ -138,7 +140,7 @@ public class DBBroker {
                     }
                 }
                 
-                ParSkija ps = new ParSkija(parSkija, duzina, radijus, vezovi, t);
+                ParSkija ps = new ParSkija(parSkija, duzina, radijus, vezovi, marka, t);
                 parovi.add(ps);
             }
             st.close();

@@ -18,7 +18,7 @@ import poslovnaLogika.Kontroler;
 public class Model extends AbstractTableModel {
 
     private KolekcijaSkija ks;
-    private String[] kolone = new String[]{"ParSkijaID", "DuzinaSkija", "Radijus", "Vezovi", "TipSkija"};
+    private String[] kolone = new String[]{"ParSkijaID", "DuzinaSkija", "Radijus", "Vezovi", "Marka", "TipSkija"};
 
     public Model() {
         ks = Kontroler.getInstance().getKs();
@@ -54,6 +54,8 @@ public class Model extends AbstractTableModel {
             case 3:
                 return ps.getVezovi();
             case 4:
+                return ps.getMarka();
+            case 5:
                 return ps.getTipSkija();
             default:
                 return "n/a";
