@@ -341,6 +341,7 @@ public class FrmUnosParaSkija extends javax.swing.JDialog {
         txtDuzna.setText(Integer.toString(ps.getDuzina()));
         txtRadijus.setText(Double.toString(ps.getRadijus()));
         txtVezovi.setText(ps.getVezovi());
+        txtMarka.setText(ps.getMarka());
         cmbTipSkija.setSelectedItem(ps.getTipSkija());
 
     }
